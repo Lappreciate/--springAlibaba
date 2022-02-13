@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: video-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 47.106.10.170:8848
+        username: nacos
+        password: nacos
