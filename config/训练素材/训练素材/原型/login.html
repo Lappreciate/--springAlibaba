@@ -1,0 +1,184 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <link rel="shortcut icon" href="https://scdn.itlaoqi.com/images/favicon.ico" />
+    <link rel="stylesheet" href="https://scdn.itlaoqi.com/resources/bootstrap4/css/bootstrap.css">
+    <link rel="stylesheet" href="https://scdn.itlaoqi.com/resources/css/base.css">
+    <title></title>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://scdn.itlaoqi.com/resources/jquery.3.3.1.min.js"></script>
+    <script src="https://scdn.itlaoqi.com/resources/bootstrap4/js/bootstrap.min.js"></script>
+    <script src="https://scdn.itlaoqi.com/resources/sweetalert2.all.min.js"></script>
+    <script src="https://scdn.itlaoqi.com/resources/jquery.cookie.js"></script>
+    <style>
+        a:hover {
+            text-decoration: none;
+        }
+
+        .nbar {
+            margin-top: 85px;
+            font-size: 80%;
+            color: #999 !important;
+            margin-left: -0.5rem;
+        }
+
+        .nbar a {
+            color: #999;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+
+        .rounded-1 {
+            border-radius: 1rem !important;
+        }
+
+        .info span {
+            padding-right: 1rem;
+        }
+
+        .aricle-content img {
+            border-radius: 1rem !important;
+        }
+
+        .passport-wrapper {
+            width: 100%;
+            height: 500px;
+            position: relative;
+            background: url(http://cdn.itlaoqi.com/images/yxw-login.jpg) no-repeat;
+        }
+
+        .passport {
+            box-sizing: border-box;
+            width: 426px;
+            min-height: 300px;
+            padding: 40px 40px 30px;
+            border-radius: 5px;
+            background-color: #fff;
+            margin-top: 50px;
+            -webkit-box-shadow: 0 4px 6px 0 rgba(0, 0, 0, .2);
+            box-shadow: 0 4px 6px 0 rgba(0, 0, 0, .2);
+        }
+
+        .fix-container {
+            position: relative;
+            width: 1140px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        .btn-warning {
+            background-color: #ff700a
+        }
+    </style>
+</head>
+<body style="background-color: #f5f5f5">
+<nav class="navbar navbar-light bg-white shadow">
+    <div class="container">
+        <div class="row">
+            <ul class="nav pt-4 pb-4">
+                <li class="nav-item">
+                    <h4 class="pl-4 pt-2">欢迎登录</h4>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid p-0 bg-white passport-wrapper">
+    <div class="fix-container " style="width: 1140px;">
+        <form id="frmLogin">
+            <div class="passport bg-white float-right">
+                <h3 class="float-left">账号登录</h3>
+                
+                <div class="clearfix"></div>
+                <div class="alert d-none mt-2" id="tips" role="alert">
+
+                </div>
+
+                <div class="input-group  mt-2 ">
+                    <input type="text" id="username" name="username" class="form-control p-4" placeholder="请输入用户名"
+                           aria-label="Username" aria-describedby="basic-addon1">
+                </div>
+
+                <div class="input-group  mt-4 ">
+                    <input id="password" name="password" class="form-control p-4" placeholder="请输入密码" type="password"
+                           aria-label="Username" aria-describedby="basic-addon1">
+                </div>
+
+                <a id="btnSubmit" class="btn btn-warning  btn-block mt-4 text-white pt-3 pb-3">登&nbsp;&nbsp;&nbsp;&nbsp;录</a>
+            </div>
+        </form>
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+
+<script>
+    function showTips(isShow, css, text) {
+        if (isShow) {
+            $("#tips").removeClass("d-none")
+            $("#tips").hide();
+            $("#tips").addClass(css);
+            $("#tips").text(text);
+            $("#tips").fadeIn(200);
+        } else {
+            $("#tips").text("");
+            $("#tips").fadeOut(200);
+            $("#tips").removeClass();
+            $("#tips").addClass("alert")
+        }
+    }
+
+
+    $("#btnSubmit").click(function () {
+        var username = $.trim($("#username").val());
+        if ( username== "") {
+            showTips(true, "alert-danger", "请输入用户名");
+            return;
+        } else {
+            showTips(false);
+        }
+
+        var password = $.trim($("#password").val());
+
+        if (password=="") {
+            showTips(true, "alert-danger", "请输入密码");
+            return;
+        } else {
+            showTips(false);
+        }
+
+        $btnReg = $(this);
+
+        $btnReg.text("正在登录...");
+        $btnReg.attr("disabled", "disabled");
+        $.ajax({
+            url: "http://localhost:9000/auth-service/auth",
+            type: "post",
+            dataType: "json",
+            data: $("#frmLogin").serialize(),
+            success: function (json) {
+                if (json.code == "0") {
+                    console.log();
+                    localStorage.token = json.data.token;
+                    window.location = "/?ts=" + new Date().getTime();
+                } else {
+                    console.log("登录失败",json);
+                    showTips(true, "alert-danger", json.message);
+                    $btnReg.text("登录");
+                    $btnReg.removeAttr("disabled");
+                }
+            }
+        });
+        return false;
+    });
+
+
+</script>
+
+</body>
+</html>
