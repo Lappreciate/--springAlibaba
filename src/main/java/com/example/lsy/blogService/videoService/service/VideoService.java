@@ -1,5 +1,6 @@
 package com.example.lsy.blogService.videoService.service;
 
+import com.example.lsy.blogService.videoService.dto.ResponseObject;
 import com.example.lsy.blogService.videoService.entity.Video;
 import com.example.lsy.blogService.videoService.mapper.VideoMapper;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class VideoService {
     @Resource
     private VideoMapper videoMapper;
 
-    public Video findByArticleId(Long articleId) {
-        return videoMapper.findByArticleId(articleId);
+    public ResponseObject<Video> findByArticleId(Long articleId) {
+        return new ResponseObject<>("0", "success", videoMapper.findByArticleId(articleId));
     }
 }

@@ -1,6 +1,7 @@
 package com.example.lsy.blogService.videoService.controller;
 
 
+import com.example.lsy.blogService.videoService.dto.ResponseObject;
 import com.example.lsy.blogService.videoService.entity.Video;
 import com.example.lsy.blogService.videoService.service.VideoService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,7 @@ public class VideoController {
 
 
     @GetMapping("/video")
-    public Video findByArticleId(Long articleId) {
-        return videoService.findByArticleId(articleId);
+    public ResponseObject<Video> findByArticleId(Long articleId) {
+        return new ResponseObject<>("0", "success", videoService.findByArticleId(articleId).getData());
     }
 }
